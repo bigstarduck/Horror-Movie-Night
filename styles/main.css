@@ -22,18 +22,31 @@ h1 {
     color: #efefef;
     font-size: 3rem;
 }
-.movie-list {
-    list-style: none;
-    padding-left: 4rem;
+
+p {
+    color: #efefef;
+    text-align: center;
     font-size: 2rem;
+    margin: 3rem;
 }
-.movie-list li {
+
+ul {
+    padding-left: 4rem;
+}
+
+li {
+
+    list-style: none;
+    font-size: 2rem;
+    color: #efefef;
     margin: 5px 0;
 }
-.movie-list a {
+
+li a {
     text-decoration: none;
     color: #efefef;
 }
+
 .movie-list a:hover {
     text-decoration: underline;
 }
@@ -49,4 +62,7 @@ h1 {
     font-weight: 400;
     font-style: normal;
 }
-  
+
+.watched {
+    color: rgb(203, 203, 0);
+}

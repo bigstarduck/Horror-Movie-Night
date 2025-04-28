@@ -23,6 +23,13 @@ h1 {
     font-size: 3rem;
 }
 
+h3 {
+    color: #efefef;
+    text-align: center;
+    font-size: 2rem;
+    margin: 1rem auto 2rem auto;
+}
+
 p {
     color: #efefef;
     text-align: center;
@@ -30,17 +37,12 @@ p {
     margin: 3rem;
 }
 
-.movie-list {
-    margin-left: 4rem auto;
-    /* display: flex;
-    flex-direction: column; */
-}
-
 ul {
-    align-items: center;
+    padding-left: 4rem;
 }
 
 li {
+
     list-style: none;
     font-size: 2rem;
     color: #efefef;
@@ -70,4 +72,16 @@ li a {
 
 .watched {
     color: rgb(203, 203, 0);
+}
+
+.movieGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-around;
+}
+
+.movieCard img{
+    max-width: 250px;
+    display: block;
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie List</title>
+    <link rel="stylesheet" href="styles/mobile.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=New+Rocker&family=Oranienbaum&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1 class="new-rocker-regular">Horror Movies</h1>
+    <p class="oranienbaum-regular">Titles in yellow are ones we have watched.</p>
+    <div class="movieGrid">
+        <div class="movieCard">
+            <img src="https://posters.movieposterdb.com/11_02/2010/1591095/l_1591095_231f09b7.jpg" alt="Insidious (2010)">
+            <h3>Insidious (2010)</h3>
+        </div>
+        <div class="movieCard">
+            <img src="https://posters.movieposterdb.com/11_02/2010/1591095/l_1591095_231f09b7.jpg" alt="Insidious (2010)">
+        </div>
+        <div class="movieCard">
+            <img src="https://posters.movieposterdb.com/11_02/2010/1591095/l_1591095_231f09b7.jpg" alt="Insidious (2010)">
+        </div>
+    </div>
+
+    <script>
+        function sortList(containerId) {
+            const listContainer = document.getElementById(containerId);
+            const listItems = Array.from(listContainer.querySelectorAll('li'));
+            
+            listItems.sort((a, b) => {
+                const textA = a.textContent.trim().toLowerCase();
+                const textB = b.textContent.trim().toLowerCase();
+                return textA.localeCompare(textB);
+            });
+    
+            listItems.forEach(item => listContainer.appendChild(item));
+        }
+    
+        // Call the function to sort the list
+        sortList('movie-list');
+    </script>
+</body>
+</html>

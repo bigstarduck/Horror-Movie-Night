@@ -27,14 +27,15 @@ h3 {
     color: #efefef;
     text-align: center;
     font-size: 2rem;
-    margin: 1rem auto 2rem auto;
+    margin: 1rem auto 1rem auto;
+    text-wrap: wrap;
 }
 
 p {
     color: #efefef;
     text-align: center;
     font-size: 2rem;
-    margin: 3rem;
+    margin: .8rem;
 }
 
 ul {
@@ -74,14 +75,24 @@ li a {
     color: rgb(203, 203, 0);
 }
 
-.movieGrid {
+.movies-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
     justify-content: space-around;
 }
 
-.movieCard img{
+.movie-card {
+    max-width: 250px;
+}
+
+.movie-card img{
     max-width: 250px;
     display: block;
+}
+
+.movie-card a {
+    font-size: 2rem;
+    color: white;
+    text-align: center;
 }

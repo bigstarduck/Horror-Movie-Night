@@ -75,6 +75,10 @@ li a {
     color: rgb(203, 203, 0);
 }
 
+.watched h3 {
+    color: rgb(203, 203, 0);
+}
+
 .movies-grid {
     display: flex;
     flex-wrap: wrap;

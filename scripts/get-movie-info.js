@@ -27,6 +27,11 @@ async function loadMovieIDs() {
     return await response.json();
 }
 
+async function loadWatchedMovieIDs() {
+    const response = await fetch('static/watched.json');
+    return await response.json();
+}
+
 async function fetchMovieData(imdbID) {
     const response = await fetch(`https://www.omdbapi.com/?i=${imdbID}&apikey=${API_KEY}`);
     console.log("New Move");
@@ -40,10 +45,8 @@ async function getMoviesData(movieIDs) {
     for (const id of movieIDs) {
         if (cachedMovies[id]) {
             moviesData.push(cachedMovies[id]);
-            console.log(cachedMovies[id])
         } else {
             const data = await fetchMovieData(id);
-            console.log(data)
             moviesData.push(data);
             cachedMovies[id] = data;
         }
@@ -53,7 +56,7 @@ async function getMoviesData(movieIDs) {
     return moviesData;
 }
 
-function createMovieCard(movie) {
+function createMovieCard(movie,watchedMovies) {
     const card = document.createElement('div');
     card.className = 'movie-card';
 
@@ -63,20 +66,26 @@ function createMovieCard(movie) {
     poster.target = "_blank";
     poster.innerHTML = `<img src="${movie.Poster}" alt="${movie.Title}" loading ="lazy">`;
     card.appendChild(poster);
-
+    
     const info = document.createElement('div');
     info.className = 'card-info';
     info.innerHTML = `
-        <h3>${movie.Title} (${movie.Year})</h3>
-        <p>Rating: ${movie.Rated}</p>
-        <p>Runtime: ${movie.Runtime}</p>
+    <h3>${movie.Title} (${movie.Year})</h3>
+    <p>Rating: ${movie.Rated}</p>
+    <p>Runtime: ${movie.Runtime}</p>
     `;
+
+    if (Object.values(watchedMovies).includes(movie.imdbID)) {
+        info.classList.add('watched');
+    }
+
     card.appendChild(info);
 
     return card;
 }
 
 async function displayMovies() {
+    const watchedMovies = await loadWatchedMovieIDs();
     try {
         const movieIDs = await loadMovieIDs();
         let movies = await getMoviesData(movieIDs);
@@ -89,25 +98,17 @@ async function displayMovies() {
 
         // Generate and display movie cards
         movies.forEach(movie => {
-            const card = createMovieCard(movie);
+            const card = createMovieCard(movie,watchedMovies);
             grid.appendChild(card);
         });
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("An error occurred while displaying movies:", error);
     }
-    // const movieIDs = await loadMovieIDs();
-    // const movies = await getMoviesData(movieIDs);
-    // const grid = document.getElementById('movies-grid');
-    // grid.innerHTML = ''; // Clear existing movies
-
-    // movies.forEach(movie => {
-    //     const card = createMovieCard(movie);
-    //     grid.appendChild(card);
-    // });
 }
 
 function sortList(containerId) {
-    const listContainer = document.getElementByc(containerId);
+    const listContainer = document.getElementById(containerId);
     const listItems = Array.from(listContainer.querySelectorAll('div.movie-card'));
     
     listItems.sort((a, b) => {

@@ -43,7 +43,7 @@ async function getMoviesData(movieIDs) {
     const moviesData = [];
 
     for (const id of movieIDs) {
-        if (cachedMovies[id].Poster && cachedMovies[id].Poster !== "N/A") {
+        if (cachedMovies[id] && cachedMovies[id].Poster && cachedMovies[id].Poster !== "N/A") {
             moviesData.push(cachedMovies[id]);
         } else {
             const data = await fetchMovieData(id);

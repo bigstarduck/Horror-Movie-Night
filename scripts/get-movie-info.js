@@ -43,7 +43,7 @@ async function getMoviesData(movieIDs) {
     const moviesData = [];
 
     for (const id of movieIDs) {
-        if (cachedMovies[id]) {
+        if (cachedMovies[id].Poster && cachedMovies[id].Poster !== "N/A") {
             moviesData.push(cachedMovies[id]);
         } else {
             const data = await fetchMovieData(id);
@@ -107,18 +107,4 @@ async function displayMovies() {
     }
 }
 
-function sortList(containerId) {
-    const listContainer = document.getElementById(containerId);
-    const listItems = Array.from(listContainer.querySelectorAll('div.movie-card'));
-    
-    listItems.sort((a, b) => {
-        const textA = a.textContent.trim().toLowerCase();
-        const textB = b.textContent.trim().toLowerCase();
-        return textA.localeCompare(textB);
-    });
-    
-    listItems.forEach(item => listContainer.appendChild(item));
-}
-
 displayMovies();
-sortList('movies-grid');

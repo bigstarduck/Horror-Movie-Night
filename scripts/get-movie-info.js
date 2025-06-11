@@ -23,12 +23,12 @@ const API_KEY = 'f6a4ead9';
 const CACHE_KEY = 'cachedMovies';
 
 async function loadMovieIDs() {
-    const response = await fetch('static/movies.json');
+    const response = await fetch('data/movies.json');
     return await response.json();
 }
 
 async function loadWatchedMovieIDs() {
-    const response = await fetch('static/watched.json');
+    const response = await fetch('data/watched.json');
     return await response.json();
 }
 

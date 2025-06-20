@@ -1,21 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie List</title>
-    <link rel="stylesheet" href="styles/mobile.css">
-    <link rel="stylesheet" href="styles/large.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=New+Rocker&family=Oranienbaum&display=swap" rel="stylesheet">
-    <script src="scripts/get-movie-info.js" defer></script>
-</head>
-<body>
-    <h1 class="new-rocker-regular">Horror Movies</h1>
-    <p id="intro-text" class="oranienbaum-regular">Titles in yellow are ones we have watched.</p>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Movies We're Planning on Watching</title>
+        <link rel="icon" href="images/favicon.png" type="image/x-icon">
+        <meta name="description" content="Movies We're Planning on Watching">
+        <meta name="author" content="Jordan Peterson">
+        
+        <meta property="og:title" content="Movie Night Watch List">
+        <meta property="og:description" content="This page shows a list of movies that we are planning on watching. Filter it for your convenience">
+        <meta property="og:url" content="https://j-peterson-sch.github.io/wdd231/movie-night/movies.html">
+        <meta property="og:image" content="https://j-peterson-sch.github.io/wdd231/movie-night/images/hero.webp">
 
-    <div id="movies-grid" class="movies-grid"></div>
+        <link rel="stylesheet" href="styles/normalize.css">
+        <link rel="stylesheet" href="styles/small.css">
+        <link rel="stylesheet" href="styles/larger.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
 
-</body>
+        <script src="scripts/navigation.js" defer></script>
+        <script src="scripts/footer.js" defer></script>
+        <script type="module" src="scripts/get-movie-info-filtering.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <button id="menu" aria-label="menu"></button>
+            <nav>
+                <div id="logo-area">
+                    <img id="logo" src="images/logo.webp" alt="movie night logo">
+                </div>
+                <div id="nav-container">
+                    <div id="nav-buttons">
+                        <ul class="nav-link-list">
+                            <li><a href="index.html" title="Home">Home</a></li>
+                            <li><a href="index.html" title="Movie List" class="active">Movie List</a></li>
+                            <li><a href="index.html" title="Request Movie">Request Movie</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <h1>Movies We're Planning on Watching</h1>
+            <h2>Movies with a box around them are ones that we've already watched</h2>
+            <div id="filter-container">
+                <div class="option">
+                    <label for="show-watched-movies">Show Watched Movies</label>
+                    <input type="checkbox" id="show-watched-movies" name="show watched movies" value="newsletter">
+                </div>                    
+                <div class="option">
+                    <label for="movie-filter">Sort Movies:</label>
+                    <select id="movie-filter">
+                        <option value="title">Sort by Title</option>
+                        <option value="runtime">Sort by Runtime</option>
+                        <option value="year">Sort by Year</option>
+                    </select>
+                </div>
+            </div>
+            <div id="movies-grid" class="movies-grid"></div>
+        </main>
+
+        <footer>
+            <section id="footer-contact">
+                <h3><strong>Movie Night</strong></h3>
+            </section>
+            <section id="social-media-icons">
+                <h3 class="not-visible">Social Media Links</h3>
+                <a href="https://www.youtube.com">
+                <img src="images/youtube.svg" alt="link to youtube" loading="lazy">
+                </a>
+                <a href="https://x.com">
+                <img src="images/twitter-x.svg" alt="link to twitter/x" loading="lazy">
+                </a>
+                <a href="https://www.linkedin.com">
+                <img src="images/linkedin.svg" alt="link to linkedin" loading="lazy">
+                </a>
+            </section>
+            <section id="schoo-info">
+                <h3>-</h3>
+                <p>Jordan Peterson</p>
+                <p id="currentyear">&copy;<span>placeholder</span></p>
+                <p id="lastModified">placeholder</p>
+            </section>
+        </footer>
+    </body>
 </html>

@@ -1,34 +1,18 @@
 'use strict';
+import { filter, sort } from "./filters.mjs";
 
-// const paragraph = document.getElementById('paragraph');
-// const imdbId = 'tt0079714'
-// const insidious = document.getElementById('insidious');
-
-// const request = new XMLHttpRequest();
-// request.open('GET',`http://www.omdbapi.com/?i=${imdbId}&apikey=f6a4ead9`);
-// // request.send();
-
-// request.addEventListener('load',function () {
-//     const data = JSON.parse(this.responseText);
-//     console.log(data);
-//     insidious.innerHTML = 
-//         `<img src="${data.Poster}" alt=${data.Title} (${data.Year})>
-//         <h3>${data.Title} (${data.Year})</h3>
-//         <h3>Rating: ${data.Rated}    Runtime: ${data.Runtime})</h3>`;
-// });
-
-
-// const MOVIE_IDS = ["tt0111161", "tt0068646", "tt0071562"];
 const API_KEY = 'f6a4ead9';
 const CACHE_KEY = 'cachedMovies';
+const swmCheckbox = document.getElementById('show-watched-movies');
+const sortSelect = document.getElementById('movie-filter');
 
 async function loadMovieIDs() {
-    const response = await fetch('static/movies.json');
+    const response = await fetch('data/movies.json');
     return await response.json();
 }
 
 async function loadWatchedMovieIDs() {
-    const response = await fetch('static/watched.json');
+    const response = await fetch('data/watched.json');
     return await response.json();
 }
 
@@ -64,7 +48,7 @@ function createMovieCard(movie,watchedMovies) {
     poster.href = `https://www.imdb.com/title/${movie.imdbID}/`;
     poster.rel = "noopener noreferrer";
     poster.target = "_blank";
-    poster.innerHTML = `<img src="${movie.Poster}" alt="${movie.Title}" loading ="lazy">`;
+    poster.innerHTML = `<img src="${movie.Poster}" alt="${movie.Title}" loading = "lazy">`;
     card.appendChild(poster);
     
     const info = document.createElement('div');
@@ -76,7 +60,7 @@ function createMovieCard(movie,watchedMovies) {
     `;
 
     if (Object.values(watchedMovies).includes(movie.imdbID)) {
-        info.classList.add('watched');
+        card.classList.add('watched');
     }
 
     card.appendChild(info);
@@ -85,13 +69,23 @@ function createMovieCard(movie,watchedMovies) {
 }
 
 async function displayMovies() {
-    const watchedMovies = await loadWatchedMovieIDs();
+    let watchedMovies = []
+    try {
+        watchedMovies = await loadWatchedMovieIDs();        
+    } catch (error) {
+        console.log("There was an error while trying to load watched movies",error);        
+    }
     try {
         const movieIDs = await loadMovieIDs();
         let movies = await getMoviesData(movieIDs);
 
-        // Sort the movies alphabetically by the Title
-        movies.sort((a, b) => a.Title.localeCompare(b.Title));
+        // Filter out the watched moves if checkbox is unchecked
+        if (!swmCheckbox.checked) {
+            movies = filter(movies,'excludeWatchedMovies',watchedMovies);
+        }
+
+        // Sort the movies       
+        sort(movies, sortSelect.value);
 
         const grid = document.getElementById('movies-grid');
         grid.innerHTML = ''; // Clear existing movies
@@ -106,5 +100,13 @@ async function displayMovies() {
         console.error("An error occurred while displaying movies:", error);
     }
 }
+
+sortSelect.addEventListener('change', (event) => {
+    displayMovies();
+});
+
+swmCheckbox.addEventListener('change', (event) => {
+    displayMovies();
+});
 
 displayMovies();

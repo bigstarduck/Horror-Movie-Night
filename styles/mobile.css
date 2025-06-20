@@ -1,3 +1,12 @@
+:root {
+  --main-color: #DAA520;
+  --secondary-color: #96c3cb;
+
+  --background-color: #2F4F4F;
+  --text-color: #FFFAF0;
+  --accents-color: #DAA520;
+  --links-color: #B0C4DE;
+}
 *,
 *::after,
 *::before {
@@ -104,4 +113,83 @@ li a {
     font-size: 2rem;
     color: white;
     text-align: center;
+}
+
+/* ************************movie grid*************************** */
+
+#filter-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  color: var(--accents-color);
+}
+
+.option {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
+input[type="checkbox"] {
+  width: 20px;       /* Customize the width */
+  height: 20px;      /* Customize the height */
+  margin: 8px;
+}
+
+#movies-grid {
+  margin-top: 1rem;
+}
+
+.watched {
+  border: 2px solid var(--accents-color);
+  overflow: hidden;
+}
+
+.movies-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-around;
+}
+
+.movie-card {
+  /* max-width: 250px; */
+  padding: 5px;
+  display: grid;
+  grid-template-rows: auto 140px;
+  align-items: start;
+  justify-items: start;
+  overflow: hidden;
+}
+
+.card-info {
+  display: grid;
+  grid-template-rows: auto auto auto;
+}
+
+.movie-card h3 {
+  padding: .8rem 0;
+  max-width: 250px;
+  font-weight: 800;
+}
+
+.movie-card img{
+  width: 250px;
+  height: 370px;
+  display: block;
+  margin: 0 auto;
+  object-fit: cover;
+}
+
+.movie-card a {
+  font-size: 2rem;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.card-info {
+  line-height: 1.8rem;
 }

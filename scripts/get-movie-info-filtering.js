@@ -5,15 +5,22 @@ const API_KEY = 'f6a4ead9';
 const CACHE_KEY = 'cachedMovies';
 const swmCheckbox = document.getElementById('show-watched-movies');
 const sortSelect = document.getElementById('movie-filter');
+const movieStatsH2 = document.getElementById('movie-count');
+let numberOfMovies = 0;
+let numberOfWatchedMovies = 0;
 
 async function loadMovieIDs() {
     const response = await fetch('data/movies.json');
-    return await response.json();
+    const movieList = await response.json();
+    numberOfMovies = movieList.length;
+    return movieList;
 }
 
 async function loadWatchedMovieIDs() {
     const response = await fetch('data/watched.json');
-    return await response.json();
+    const watchedMovieList = await response.json();
+    numberOfWatchedMovies = watchedMovieList.length;
+    return watchedMovieList;
 }
 
 async function fetchMovieData(imdbID) {
@@ -95,6 +102,8 @@ async function displayMovies() {
             const card = createMovieCard(movie,watchedMovies);
             grid.appendChild(card);
         });
+
+        movieStatsH2.textContent = `There are currently ${numberOfMovies} unwatched movies and ${numberOfWatchedMovies} watched movies on the list`;
     } 
     catch (error) {
         console.error("An error occurred while displaying movies:", error);

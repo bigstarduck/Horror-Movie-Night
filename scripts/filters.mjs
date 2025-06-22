@@ -20,7 +20,13 @@ export function sort(moviesList,sortType) {
 
         return moviesList;
     }else if (sortType === 'runtime') {
-        moviesList.sort((a, b) => b.runtime - a.runtime);
+
+        moviesList.sort((a, b) => {
+        // Extract the number part and convert to integer
+        const runtimeA = parseInt(a.Runtime, 10);
+        const runtimeB = parseInt(b.Runtime, 10);
+        return runtimeA - runtimeB; // Ascending order
+        });
 
         return moviesList;
     }else if (sortType === 'year') {

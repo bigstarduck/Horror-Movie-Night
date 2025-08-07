@@ -421,6 +421,57 @@ input[type="email"] {
   border-radius: 8px;
 }
 
+/* ************************bucket list*************************** */
+#bucket-list-content #calendar {
+  max-width: 400px;
+  margin: 0 auto 3rem auto;
+}
+#bucket-list{
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 1rem;
+  margin: 0 auto 0 auto;
+}
+
+#bucket-list ul{
+  margin-bottom: 2rem;
+  list-style-type: none;
+  line-height: 1.8rem;
+  min-width: 200px;
+}
+
+.checkable {
+  user-select: none; /* Prevent text selection */
+  position: relative;
+  padding-left: 25px; /* Space for the checkbox */
+  cursor: pointer; /* Pointer cursor */
+  display: inline-block;
+}
+
+.checkable::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;  /* Width of the checkbox */
+  height: 15px; /* Height of the checkbox */
+  border: 2px solid #000;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.checked::before {
+  content: '✔';
+  font-size: 12px;
+  color: #000;
+  text-align: center;
+  line-height: 15px;
+  background-color: #ccc;
+}
+
 /* ************************footer************************ */
 
 footer {

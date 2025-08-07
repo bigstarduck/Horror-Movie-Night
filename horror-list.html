@@ -3,14 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Movie Night Homepage</title>
+        <title>Movies We're Planning on Watching</title>
         <link rel="icon" href="images/favicon.png" type="image/x-icon">
-        <meta name="description" content="Welcome page for Movie Night.">
+        <meta name="description" content="Movies We're Planning on Watching">
         <meta name="author" content="Jordan Peterson">
         
-        <meta property="og:title" content="Movie Night Homepage">
-        <meta property="og:description" content="Welcome page for Movie Night.">
-        <meta property="og:url" content="https://j-peterson-sch.github.io/wdd231/movie-night/index.html">
+        <meta property="og:title" content="Movie Night Watch List">
+        <meta property="og:description" content="This page shows a list of movies that we are planning on watching. Filter it for your convenience">
+        <meta property="og:url" content="https://j-peterson-sch.github.io/wdd231/movie-night/movies.html">
         <meta property="og:image" content="https://j-peterson-sch.github.io/wdd231/movie-night/images/hero.webp">
 
         <link rel="stylesheet" href="styles/normalize.css">
@@ -22,6 +22,7 @@
 
         <script src="scripts/navigation.js" defer></script>
         <script src="scripts/footer.js" defer></script>
+        <script type="module" src="scripts/get-movie-info-filtering.js"></script>
     </head>
 
     <body>
@@ -41,40 +42,26 @@
                     </div>
                 </div>
             </nav>
-            <!-- <div id="hero">
-                <img src="images/hero.webp" alt="Friends watching a movie">
-            </div> -->
         </header>
         <main>
-            <h1>Movie Night</h1>
-            <div id="homepage-content">
-                <p>Welcome to our Movie Night Hub! This is the go-to spot for all things related to our 
-                    regular movie nights with friends. Here, you’ll find the dates and times of our 
-                    upcoming gatherings, a curated list of movies we’re planning to watch, and a special 
-                    section where you can <a href="request.html">suggest films</a> you’d like to see added to our lineup. Whether 
-                    you’re a longtime member or a new friend looking to join in, this site keeps 
-                    everyone connected and excited for our next cinematic adventure. Grab your popcorn 
-                    and get ready for some great nights together!</p>
-                <div id="calendar">
-                    <h2>Calendar</h2>
-                    <ul>
-                        <li>6/06 - Movie Night - The Bourne Identity</li>
-                        <li>6/13 - Movie Night - The Lion King</li>
-                        <li>6/20 - Movie Night - Toy Story</li>
-                        <li>6/27 - Movie Night - E.T. the Extra-Terrestrial</li>
-                        <li>7/04 - No Movie (Forth of July)</li>
-                        <li>7/11 - Movie Night - Inception</li>
-                    </ul>
-                </div>
-    
-                <div class="movie-highlight">
-                    <h2>Last Weeks Movie</h2>
-                    <figure>
-                      <img src="images/bourne-identity.webp" alt="last weeks movie was The Bourne Identity" loading="lazy">
-                      <figcaption class="bold-text">The Bourne Identity</figcaption>
-                    </figure>
+            <h1>Movies We're Planning on Watching</h1>
+            <h2>Movies with a box around them are ones that we've already watched</h2>
+            <h2 id="movie-count"></h2>
+            <div id="filter-container">
+                <div class="option">
+                    <label for="show-watched-movies">Show Watched Movies</label>
+                    <input type="checkbox" id="show-watched-movies" name="show watched movies" value="newsletter">
+                </div>                    
+                <div class="option">
+                    <label for="movie-filter">Sort Movies:</label>
+                    <select id="movie-filter">
+                        <option value="title">Sort by Title</option>
+                        <option value="runtime">Sort by Runtime</option>
+                        <option value="year">Sort by Year</option>
+                    </select>
                 </div>
             </div>
+            <div id="movies-grid" class="movies-grid"></div>
         </main>
 
         <footer>
@@ -93,8 +80,10 @@
                 <img src="images/linkedin.svg" alt="link to linkedin" loading="lazy">
                 </a>
             </section>
-            <section>
+            <section id="schoo-info">
+                <h3>-</h3>
                 <p>Jordan Peterson</p>
+                <p id="currentyear">&copy;<span>placeholder</span></p>
                 <p id="lastModified">placeholder</p>
             </section>
         </footer>

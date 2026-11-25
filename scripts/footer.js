@@ -1,8 +1,11 @@
-const copywriteText = document.querySelector("#currentyear");
+const copyrightText = document.querySelector("#currentyear");
 const lastModifiedText = document.querySelector("#lastModified");
 
-const currentYear = new Date().getFullYear();
-const lastModifiedDate = document.lastModified;
+if (copyrightText) {
+    const currentYear = new Date().getFullYear();
+    copyrightText.innerHTML = `&copy;${currentYear}<span> Classy Movie Nights LLC</span>`;
+}
 
-copywriteText.innerHTML = `&copy;${currentYear}<span > Classy Movie Nights LLC</span>`;
-lastModifiedText.innerHTML = `Last Modification: ${lastModifiedDate}`;
+if (lastModifiedText) {
+    lastModifiedText.textContent = `Last Modification: ${document.lastModified}`;
+}

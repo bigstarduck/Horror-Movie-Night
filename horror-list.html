@@ -48,19 +48,59 @@
             <h2>Movies with a box around them are ones that we've already watched</h2>
             <h2 id="movie-count"></h2>
             <div id="filter-container">
+                <div class="option search-option">
+                    <label for="movie-search">Search:</label>
+                    <input type="search" id="movie-search" placeholder="Movie title…" autocomplete="off">
+                </div>
                 <div class="option">
-                    <label for="show-watched-movies">Show Watched Movies</label>
-                    <input type="checkbox" id="show-watched-movies" name="show watched movies" value="newsletter">
-                </div>                    
+                    <label for="genre-filter">Genre:</label>
+                    <select id="genre-filter">
+                        <option value="">All genres</option>
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="rating-filter">IMDb Rating:</label>
+                    <select id="rating-filter">
+                        <option value="">Any rating</option>
+                        <option value="6">6+</option>
+                        <option value="7">7+</option>
+                        <option value="8">8+</option>
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="runtime-filter">Length:</label>
+                    <select id="runtime-filter">
+                        <option value="">Any length</option>
+                        <option value="90">90 min or less</option>
+                        <option value="120">Under 2 hours</option>
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="decade-filter">Decade:</label>
+                    <select id="decade-filter">
+                        <option value="">Any decade</option>
+                    </select>
+                </div>
                 <div class="option">
                     <label for="movie-filter">Sort Movies:</label>
                     <select id="movie-filter">
                         <option value="title">Sort by Title</option>
                         <option value="runtime">Sort by Runtime</option>
                         <option value="year">Sort by Year</option>
+                        <option value="rating">Sort by IMDb Rating</option>
                     </select>
                 </div>
+                <div class="option">
+                    <label for="show-watched-movies">Show Watched Movies</label>
+                    <input type="checkbox" id="show-watched-movies" name="show-watched-movies">
+                </div>
             </div>
+            <div id="random-picker">
+                <button id="randMovie" class="pick-button" disabled>🎲 Pick a Random Unwatched Movie</button>
+                <p class="picker-hint">Picks from the movies that match your filters.</p>
+                <div id="random-movie-result" aria-live="polite"></div>
+            </div>
+            <p id="results-count" aria-live="polite"></p>
             <div id="movies-grid" class="movies-grid"></div>
         </main>
 
@@ -81,6 +121,7 @@
                 </a>
             </section>
             <section>
+                <p id="currentyear"></p>
                 <p>Jordan Peterson</p>
                 <p id="lastModified">placeholder</p>
             </section>

@@ -1,121 +1,115 @@
 'use strict';
-import { filter, sort } from "./filters.mjs";
+import { filter, sort, applyFilters, genresOf, startYear } from "./filters.mjs";
+import { loadMovieIDs, loadWatchedMovieIDs, getMoviesData, createMovieCard, revealRandomMovie } from "./movie-data.mjs";
 
-const API_KEY = 'f6a4ead9';
-const CACHE_KEY = 'cachedMovies';
 const swmCheckbox = document.getElementById('show-watched-movies');
 const sortSelect = document.getElementById('movie-filter');
+const searchInput = document.getElementById('movie-search');
+const genreSelect = document.getElementById('genre-filter');
+const ratingSelect = document.getElementById('rating-filter');
+const runtimeSelect = document.getElementById('runtime-filter');
+const decadeSelect = document.getElementById('decade-filter');
 const movieStatsH2 = document.getElementById('movie-count');
-let numberOfMovies = 0;
-let numberOfWatchedMovies = 0;
+const resultsCount = document.getElementById('results-count');
+const grid = document.getElementById('movies-grid');
+const randMovieBtn = document.getElementById('randMovie');
+const randMovieResult = document.getElementById('random-movie-result');
 
-async function loadMovieIDs() {
-    const response = await fetch('data/movies.json');
-    const movieList = await response.json();
-    numberOfMovies = movieList.length;
-    return movieList;
+// Loaded once when the page opens; filters and sorting reuse this data.
+let allMovies = [];
+let watchedMovies = [];
+
+function currentCriteria() {
+    return {
+        search: searchInput.value,
+        genre: genreSelect.value,
+        minRating: ratingSelect.value,
+        maxRuntime: runtimeSelect.value,
+        decade: decadeSelect.value,
+    };
 }
 
-async function loadWatchedMovieIDs() {
-    const response = await fetch('data/watched.json');
-    const watchedMovieList = await response.json();
-    numberOfWatchedMovies = watchedMovieList.length;
-    return watchedMovieList;
+function addOptions(select, values, labelFor = v => v) {
+    values.forEach(value => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = labelFor(value);
+        select.appendChild(option);
+    });
 }
 
-async function fetchMovieData(imdbID) {
-    const response = await fetch(`https://www.omdbapi.com/?i=${imdbID}&apikey=${API_KEY}`);
-    console.log("New Move");
-    return await response.json();
+// Fill the genre and decade dropdowns with what's actually on the list
+function populateFilterOptions() {
+    const genres = new Set(allMovies.flatMap(genresOf));
+    addOptions(genreSelect, [...genres].sort());
+
+    const decades = new Set(allMovies.map(m => Math.floor(startYear(m) / 10) * 10).filter(Boolean));
+    addOptions(decadeSelect, [...decades].sort(), d => `${d}s`);
 }
 
-async function getMoviesData(movieIDs) {
-    const cachedMovies = JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
-    const moviesData = [];
+function unwatchedMatchingMovies() {
+    const unwatched = filter(allMovies, 'excludeWatchedMovies', watchedMovies);
+    return applyFilters(unwatched, currentCriteria());
+}
 
-    for (const id of movieIDs) {
-        if (cachedMovies[id] && cachedMovies[id].Poster && cachedMovies[id].Poster !== "N/A") {
-            moviesData.push(cachedMovies[id]);
-        } else {
-            const data = await fetchMovieData(id);
-            moviesData.push(data);
-            cachedMovies[id] = data;
-        }
+function renderMovies() {
+    let movies = allMovies;
+
+    if (!swmCheckbox.checked) {
+        movies = filter(movies, 'excludeWatchedMovies', watchedMovies);
     }
+    movies = sort(applyFilters(movies, currentCriteria()), sortSelect.value);
 
-    localStorage.setItem(CACHE_KEY, JSON.stringify(cachedMovies));
-    return moviesData;
+    grid.replaceChildren(...movies.map(movie => createMovieCard(movie, watchedMovies)));
+
+    resultsCount.textContent = movies.length === 0
+        ? 'No movies match those filters.'
+        : `Showing ${movies.length} movie${movies.length === 1 ? '' : 's'}`;
 }
 
-function createMovieCard(movie,watchedMovies) {
-    const card = document.createElement('div');
-    card.className = 'movie-card';
-
-    const poster = document.createElement('a');
-    poster.href = `https://www.imdb.com/title/${movie.imdbID}/`;
-    poster.rel = "noopener noreferrer";
-    poster.target = "_blank";
-    poster.innerHTML = `<img src="${movie.Poster}" alt="${movie.Title}" loading = "lazy">`;
-    card.appendChild(poster);
-    
-    const info = document.createElement('div');
-    info.className = 'card-info';
-    info.innerHTML = `
-    <h3>${movie.Title} (${movie.Year})</h3>
-    <p>Rating: ${movie.Rated}</p>
-    <p>Runtime: ${movie.Runtime}</p>
-    `;
-
-    if (Object.values(watchedMovies).includes(movie.imdbID)) {
-        card.classList.add('watched');
-    }
-
-    card.appendChild(info);
-
-    return card;
-}
-
-async function displayMovies() {
-    let watchedMovies = []
+async function displayRandMovie() {
+    randMovieBtn.disabled = true;
     try {
-        watchedMovies = await loadWatchedMovieIDs();        
+        const choices = unwatchedMatchingMovies();
+        if (choices.length === 0) {
+            randMovieResult.innerHTML = '<p>No unwatched movies match your filters.</p>';
+            return;
+        }
+        await revealRandomMovie(randMovieResult, choices);
     } catch (error) {
-        console.log("There was an error while trying to load watched movies",error);        
-    }
-    try {
-        const movieIDs = await loadMovieIDs();
-        let movies = await getMoviesData(movieIDs);
-
-        // Filter out the watched moves if checkbox is unchecked
-        if (!swmCheckbox.checked) {
-            movies = filter(movies,'excludeWatchedMovies',watchedMovies);
-        }
-
-        // Sort the movies       
-        sort(movies, sortSelect.value);
-
-        const grid = document.getElementById('movies-grid');
-        grid.innerHTML = ''; // Clear existing movies
-
-        // Generate and display movie cards
-        movies.forEach(movie => {
-            const card = createMovieCard(movie,watchedMovies);
-            grid.appendChild(card);
-        });
-
-        movieStatsH2.textContent = `There are currently ${numberOfMovies} unwatched movies and ${numberOfWatchedMovies} watched movies on the list`;
-    } 
-    catch (error) {
-        console.error("An error occurred while displaying movies:", error);
+        console.error("An error occurred while picking a random movie:", error);
+        randMovieResult.innerHTML = '<p>Sorry, something went wrong picking a movie. Try again.</p>';
+    } finally {
+        randMovieBtn.disabled = false;
     }
 }
 
-sortSelect.addEventListener('change', (event) => {
-    displayMovies();
-});
+async function init() {
+    grid.innerHTML = '<p class="loading">Loading movies…</p>';
+    try {
+        try {
+            watchedMovies = await loadWatchedMovieIDs();
+        } catch (error) {
+            console.log("There was an error while trying to load watched movies", error);
+        }
+        const movieIDs = await loadMovieIDs();
+        allMovies = await getMoviesData(movieIDs);
 
-swmCheckbox.addEventListener('change', (event) => {
-    displayMovies();
-});
+        const unwatchedCount = movieIDs.filter(id => !watchedMovies.includes(id)).length;
+        movieStatsH2.textContent = `There are currently ${unwatchedCount} unwatched movies and ${watchedMovies.length} watched movies on the list`;
 
-displayMovies();
+        populateFilterOptions();
+        renderMovies();
+        randMovieBtn.disabled = false;
+    } catch (error) {
+        console.error("An error occurred while displaying movies:", error);
+        grid.innerHTML = '<p class="loading">Sorry, the movie list couldn\'t be loaded. Try refreshing the page.</p>';
+    }
+}
+
+[swmCheckbox, sortSelect, genreSelect, ratingSelect, runtimeSelect, decadeSelect]
+    .forEach(control => control.addEventListener('change', renderMovies));
+searchInput.addEventListener('input', renderMovies);
+randMovieBtn.addEventListener('click', displayRandMovie);
+
+init();
